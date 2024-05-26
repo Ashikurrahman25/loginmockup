@@ -1,52 +1,62 @@
 // src/ConnectWalletButton.js
-import React from 'react';
+import React, { useState } from 'react';
 import { setupWalletSelector } from '@near-wallet-selector/core';
 import { setupMeteorWallet } from '@near-wallet-selector/meteor-wallet';
 import { setupModal } from "@near-wallet-selector/modal-ui";
 import "@near-wallet-selector/modal-ui/styles.css"
 
 
+
 const ConnectWalletButton = () => {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
   const handleConnectWallet = async () => {
     try {
-        const selector = await setupWalletSelector({
-            network: "mainnet",
-            modules: [setupMeteorWallet()],
-          });
-          
-          const modal = setupModal(selector, {
-            contractId: "spearonnear.near",
-          });
-          sendMessageToUnity();
-          modal.show();
-        //   const wallet = await selector.wallet('meteor-wallet');
-        //   const accounts = await wallet.signIn({ contractId: "spearonnear.near" });
+      const selector = await setupWalletSelector({
+        network: "testnet",
+        modules: [setupMeteorWallet()],
+      });
 
+      const modal = setupModal(selector, {
+        contractId: "spearonnear.near",
+      });
+      // modal.show();
+      const wallet = await selector.wallet('meteor-wallet');
+      const accounts = await wallet.signIn({ contractId: "spearonnear.near" });
 
-        function sendMessageToUnity(message) {
-          if (window.opener) {
-
-            var messageObject = {
-  name: "John Doe",  // Example name
-  balance: 1234.56   // Example balance
-};
-window.opener.postMessage(JSON.stringify(messageObject), "*"); 
-          } else {
-              console.warn("No opener window found.");
-          }
+      function sendMessageToUnity() {
+        if (window.opener) {
+          const messageObject = {
+            accountId: accounts[0].accountId,  // Example accountId
+            publicKey: accounts[0].publicKey     // Example publicKey
+          };
+          window.opener.postMessage(JSON.stringify(messageObject), "*");
+        } else {
+          console.warn("No opener window found.");
+        }
       }
-   
 
-        // console.log(accounts[0]);
+      sendMessageToUnity();
+      setIsLoggedIn(true);
+      console.log(accounts[0]);
 
     } catch (error) {
       console.error("Error during wallet setup or sign-in:", error);
     }
+  };
 
+  const handleBackToGame = () => {
+    window.close();
   };
 
   return (
-    <button onClick={handleConnectWallet}>Connect Wallet</button>
+    <div>
+      {!isLoggedIn ? (
+        <button onClick={handleConnectWallet}>Connect Wallet</button>
+      ) : (
+        <button onClick={handleBackToGame}>Back To Game</button>
+      )}
+    </div>
   );
 };
 
