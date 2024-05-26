@@ -3,12 +3,7 @@ import React from 'react';
 import './App.css';
 import ConnectWalletButton from './ConnectWalletButton';
 import { Buffer } from 'buffer';
-import VuplexPolyfill from './VuplexPolyfill';
 
-
-if (!window.vuplex) {
-  window.vuplex = new VuplexPolyfill();
-}
 window.Buffer = Buffer;
 const App = () => {
   return (

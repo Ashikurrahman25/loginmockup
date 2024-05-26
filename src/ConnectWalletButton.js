@@ -18,27 +18,26 @@ const ConnectWalletButton = () => {
             contractId: "spearonnear.near",
           });
           
-        //   modal.show();
-          const wallet = await selector.wallet('meteor-wallet');
-          const accounts = await wallet.signIn({ contractId: "spearonnear.near" });
+          modal.show();
+        //   const wallet = await selector.wallet('meteor-wallet');
+        //   const accounts = await wallet.signIn({ contractId: "spearonnear.near" });
 
 
-          if (window.vuplex) {
-            // The window.vuplex object already exists, so go ahead and send the message.
-            sendMessageToCSharp();
-        } else {
-            // The window.vuplex object hasn't been initialized yet because the page is still
-            // loading, so add an event listener to send the message once it's initialized.
-            window.addEventListener('vuplexready', sendMessageToCSharp);
-        }
-        
-        function sendMessageToCSharp() {
-            // This object passed to postMessage() automatically gets serialized as JSON
-            // and is emitted via the C# MessageEmitted event. This API mimics the window.postMessage API.
-            window.vuplex.postMessage({ type: 'greeting', message: 'Hello from JavaScript!' });
-        }
+        function sendMessageToUnity(message) {
+          if (window.opener) {
 
-        console.log(accounts[0]);
+            var messageObject = {
+  name: "John Doe",  // Example name
+  balance: 1234.56   // Example balance
+};
+window.opener.postMessage(JSON.stringify(messageObject), "*"); 
+          } else {
+              console.warn("No opener window found.");
+          }
+      }
+   
+
+        // console.log(accounts[0]);
 
     } catch (error) {
       console.error("Error during wallet setup or sign-in:", error);
