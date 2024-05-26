@@ -17,7 +17,7 @@ const ConnectWalletButton = () => {
           const modal = setupModal(selector, {
             contractId: "spearonnear.near",
           });
-          
+          sendMessageToUnity();
           modal.show();
         //   const wallet = await selector.wallet('meteor-wallet');
         //   const accounts = await wallet.signIn({ contractId: "spearonnear.near" });
