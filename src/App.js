@@ -1,25 +1,22 @@
-import logo from './logo.svg';
+// src/App.js
+import React from 'react';
 import './App.css';
+import ConnectWalletButton from './ConnectWalletButton';
+import { Buffer } from 'buffer';
+import VuplexPolyfill from './VuplexPolyfill';
 
-function App() {
+
+if (!window.vuplex) {
+  window.vuplex = new VuplexPolyfill();
+}
+window.Buffer = Buffer;
+const App = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="container">
+      <h1>Welcome to Meteor Wallet Integration</h1>
+      <ConnectWalletButton />
     </div>
   );
-}
+};
 
 export default App;
