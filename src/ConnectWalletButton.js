@@ -31,6 +31,25 @@ const ConnectWalletButton = () => {
             publicKey: accounts[0].publicKey     // Example publicKey
           };
           window.opener.postMessage(JSON.stringify(messageObject), "*");
+
+
+          (async () => {
+            const wallet = await selector.wallet("sender");
+            await wallet.signAndSendTransaction({
+              signerId: accounts[0].accountId,
+              receiverId: "nearobot.testnet",
+              actions: [{
+                type: "FunctionCall",
+                params: {
+                  methodName: "addMessage",
+                  args: { text: "Hello World!" },
+                  gas: "30000000000000",
+                  deposit: "10000000000000000000000",
+                }
+              }]
+            });
+          })();
+
         } else {
           console.warn("No opener window found.");
         }
