@@ -34,7 +34,7 @@ const ConnectWalletButton = () => {
 
 
           (async () => {
-            const wallet = await selector.wallet("sender");
+            const wallet = await selector.wallet("meteor-wallet");
             await wallet.signAndSendTransaction({
               signerId: accounts[0].accountId,
               receiverId: "nearobot.testnet",
