@@ -9,13 +9,12 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 window.Buffer = Buffer;
 
 const VerifyPage = () => {
-  const navigate = useNavigate();
+
   const { parameterId } = useParams();
   const [walletData, setWalletData] = useState(null);
   const [amountToPay, setAmountToPay] = useState('1000000000'); // example amount
   const [transactionId, setTransactionId] = useState(null);
   const [error, setError] = useState(null);
-  const [showBackButton, setShowBackButton] = useState(false);
   const [paymentDone, setPaymentDone] = useState(false);
 
   const handleVerify = async () => {
@@ -107,6 +106,21 @@ const VerifyPage = () => {
     }
   };
 
+  function onBack(){
+    if (window.opener) {
+        const messageObject = {
+            success: true,
+            txnLink:`https://testnet.nearblocks.io/txns/${transactionId}`
+        };
+
+          console.log(messageObject);
+  
+        window.opener.postMessage(JSON.stringify(messageObject), "*");
+      } else {
+        console.warn("No opener window found.");
+      }
+  }
+
   return (
     <div className="card mt-5">
       <div className="card-body">
@@ -116,9 +130,9 @@ const VerifyPage = () => {
             {paymentDone ? (
               <>
                 <p className="mt-3">
-                  <strong>Transaction Success!</strong> <a href={`https://testnet.nearblocks.io/txns/${transactionId}`} target="_blank" rel="noopener noreferrer">View Transaction</a>
+                  <strong>Payment Successful!</strong> <a href={`https://testnet.nearblocks.io/txns/${transactionId}`} target="_blank" rel="noopener noreferrer">View Transaction</a>
                 </p>
-                <button className="btn btn-secondary mt-3" onClick={() => navigate('/')} >Back to Game</button>
+                <button className="btn btn-secondary mt-3" onClick={() => onBack} >Back to Game</button>
               </>
             ) : (
               <>

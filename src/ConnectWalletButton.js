@@ -34,7 +34,7 @@ const ConnectWalletButton = ({ onWalletConnected }) => {
       });
 
       setIsLoggedIn(true);
-      sendMessageToUnity(accounts);
+    //   sendMessageToUnity(accounts);
       console.log(accounts);
     } catch (error) {
       console.error("Error during wallet setup or sign-in:", error);
@@ -47,17 +47,7 @@ const ConnectWalletButton = ({ onWalletConnected }) => {
     return account.amount;
   };
 
-  const sendMessageToUnity = (accounts) => {
-    if (window.opener) {
-        const messageObject = {
-          accountId: accounts[0].accountId,
-          publicKey: accounts[0].publicKey,
-        };
-        window.opener.postMessage(JSON.stringify(messageObject), "*");
-      } else {
-        console.warn("No opener window found.");
-      }
-  };
+
 
   const viewMethod = async ({ networkId, contractId, method, args = {} }) => {
     const url = `https://rpc.${networkId}.near.org`;

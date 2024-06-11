@@ -13,16 +13,6 @@ const ConnectWalletPage = () => {
 
   const handleBackToGame = () => {
     if (window.opener) {
-      const messageObject = {
-        walletData
-      };
-
-
-        console.log(messageObject);
-
-      window.opener.postMessage(JSON.stringify(messageObject), "*");
-    } else {
-
       const data = {
         accountId: walletData.accountId,
         nearBal:(walletData.nearBalance/Math.pow(10,24)).toFixed(2),
@@ -32,9 +22,10 @@ const ConnectWalletPage = () => {
         data
       };
 
-
-        console.log(messageObject);
-
+      console.log(messageObject);
+      window.opener.postMessage(JSON.stringify(messageObject), "*");
+      window.close();
+    } else {
       console.warn("No opener window found.");
     }
   };
