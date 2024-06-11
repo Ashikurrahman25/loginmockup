@@ -21,7 +21,7 @@ const ConnectWalletPage = () => {
   
       const messageToSend = {
           identifier: "connection",
-          message: JSON.stringify(messageObject)
+          data: messageObject
       };
     
       console.log(messageToSend); 
