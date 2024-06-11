@@ -20,7 +20,7 @@ const ConnectWalletPage = () => {
       };
   
       // Add the identifier to the message object
-      const identifier = "wallet_connection";  // Choose a unique identifier for your site
+       // Choose a unique identifier for your site
       const messageToSend = {
           identifier: identifier,
           message: JSON.stringify(messageObject)
