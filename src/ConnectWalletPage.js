@@ -13,13 +13,11 @@ const ConnectWalletPage = () => {
 
   const handleBackToGame = () => {
     if (window.opener) {
-      const data = {
+
+      const messageObject = {
         accountId: walletData.accountId,
         nearBal:(walletData.nearBalance/Math.pow(10,24)).toFixed(2),
         spearBal: walletData.tokenBalance/Math.pow(10,8)
-      }
-      const messageObject = {
-        data
       };
 
       console.log(messageObject);
