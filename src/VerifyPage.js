@@ -132,7 +132,7 @@ const VerifyPage = () => {
                 <p className="mt-3">
                   <strong>Payment Successful!</strong> <a href={`https://testnet.nearblocks.io/txns/${transactionId}`} target="_blank" rel="noopener noreferrer">View Transaction</a>
                 </p>
-                <button className="btn btn-secondary mt-3" onClick={() => onBack} >Back to Game</button>
+                <button className="btn btn-secondary mt-3" onClick={onBack} >Back to Game</button>
               </>
             ) : (
               <>
