@@ -114,11 +114,8 @@ const VerifyPage = () => {
             txnLink:`https://testnet.nearblocks.io/txns/${transactionId}`
         };
 
-          console.log(messageObject);
-
-          
-  
         window.opener.postMessage(JSON.stringify(messageObject), "*");
+        window.close();
       } else {
         console.warn("No opener window found.");
       }
