@@ -13,17 +13,23 @@ const ConnectWalletPage = () => {
 
   const handleBackToGame = () => {
     if (window.opener) {
-
       const messageObject = {
-        accountId: walletData.accountId,
-        nearBal:(walletData.nearBalance/Math.pow(10,24)).toFixed(2),
-        spearBal: walletData.tokenBalance/Math.pow(10,8)
+          accountId: walletData.accountId,
+          nearBal: (walletData.nearBalance / Math.pow(10, 24)).toFixed(2),
+          spearBal: walletData.tokenBalance / Math.pow(10, 8)
       };
-
-      console.log(messageObject);
-      window.opener.postMessage(JSON.stringify(messageObject), "*");
-      window.close();
-    } else {
+  
+      // Add the identifier to the message object
+      const identifier = "wallet_connection";  // Choose a unique identifier for your site
+      const messageToSend = {
+          identifier: identifier,
+          message: JSON.stringify(messageObject)
+      };
+    
+      console.log(messageToSend); 
+      window.opener.postMessage(JSON.stringify(messageToSend), "*"); 
+      window.close(); 
+  } else {
       console.warn("No opener window found.");
     }
   };
