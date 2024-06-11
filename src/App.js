@@ -1,16 +1,20 @@
-// src/App.js
 import React from 'react';
 import './App.css';
-import ConnectWalletButton from './ConnectWalletButton';
-import { Buffer } from 'buffer';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import ConnectWalletPage from './ConnectWalletPage';
+import VerifyPage from './VerifyPage';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
-window.Buffer = Buffer;
 const App = () => {
   return (
-    <div className="container">
-      <h1>Welcome to Meteor Wallet Integration</h1>
-      <ConnectWalletButton />
-    </div>
+    <Router>
+      <div className="container">
+        <Routes>
+          <Route path="/verify/:parameterId" element={<VerifyPage />} />
+          <Route path="/" element={<ConnectWalletPage />} />
+        </Routes>
+      </div>
+    </Router>
   );
 };
 

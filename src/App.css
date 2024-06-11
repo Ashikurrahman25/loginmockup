@@ -1,7 +1,11 @@
-/* src/App.css */
 .container {
   text-align: center;
   margin-top: 50px;
+}
+
+.card {
+  margin: 0 auto;
+  width: 50%;
 }
 
 button {
