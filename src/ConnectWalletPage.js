@@ -19,10 +19,8 @@ const ConnectWalletPage = () => {
           spearBal: walletData.tokenBalance / Math.pow(10, 8)
       };
   
-      // Add the identifier to the message object
-       // Choose a unique identifier for your site
       const messageToSend = {
-          identifier: identifier,
+          identifier: "connection",
           message: JSON.stringify(messageObject)
       };
     
@@ -48,11 +46,11 @@ const ConnectWalletPage = () => {
                 </tr>
                 <tr>
                   <td><strong>Near Balance:</strong></td>
-                  <td>{walletData.nearBalance}</td>
+                  <td>{(walletData.nearBalance/Math.pow(10,24)).toFixed(2)}</td>
                 </tr>
                 <tr>
                   <td><strong>Spear Balance:</strong></td>
-                  <td>{walletData.tokenBalance}</td>
+                  <td>{walletData.tokenBalance/Math.pow(10,8)}</td>
                 </tr>
               </tbody>
             </table>

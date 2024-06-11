@@ -110,10 +110,13 @@ const VerifyPage = () => {
     if (window.opener) {
         const messageObject = {
             success: true,
+            identifier: 'payment',
             txnLink:`https://testnet.nearblocks.io/txns/${transactionId}`
         };
 
           console.log(messageObject);
+
+          
   
         window.opener.postMessage(JSON.stringify(messageObject), "*");
       } else {
