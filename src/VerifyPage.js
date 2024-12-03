@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { setupWalletSelector } from '@near-wallet-selector/core';
 import { setupMeteorWallet } from '@near-wallet-selector/meteor-wallet';
@@ -10,13 +10,20 @@ window.Buffer = Buffer;
 
 const VerifyPage = () => {
 
-  const { parameterId } = useParams();
+  const { signerId,contractId, amount } = useParams();
   const [walletData, setWalletData] = useState(null);
   const [amountToPay, setAmountToPay] = useState('1000000000'); // example amount
   const [transactionId, setTransactionId] = useState(null);
   const [error, setError] = useState(null);
   const [paymentDone, setPaymentDone] = useState(false);
 
+  useEffect(() => {
+    if (amount) {
+      setAmountToPay(amount * Math.pow(10, 8)); // assuming amount needs scaling
+    }
+  }, [amount]);
+
+  
   const handleVerify = async () => {
     try {
       const selector = await setupWalletSelector({
@@ -24,25 +31,31 @@ const VerifyPage = () => {
         modules: [setupMeteorWallet()],
       });
 
+  // setAmountToPay(amount*Math.pow(10,8));
+
+
       const wallet = await selector.wallet('meteor-wallet');
-      const accounts = await wallet.signIn({ contractId: "spearonnear.near" });
+      const accounts = await wallet.signIn({ contractId: contractId });
       const accountId = accounts[0].accountId;
 
-      if (accountId !== parameterId) {
+      if (accountId !== signerId) {
         setError('Account ID does not match.');
         return;
       }
 
-      const nearBalance = await getBalance(accountId);
+      console.log(contractId,amount)
+
+  
+      const nearBalance = await getBalance(signerId);
       const tokenBalance = await viewMethod({
         networkId: 'testnet',
-        contractId: 'splaunch.testnet',
+        contractId: contractId,
         method: 'ft_balance_of',
-        args: { account_id: accountId },
+        args: { account_id: signerId },
       });
 
       setWalletData({
-        accountId,
+        signerId,
         nearBalance,
         tokenBalance,
       });
@@ -84,13 +97,13 @@ const VerifyPage = () => {
 
       const wallet = await selector.wallet('meteor-wallet');
       const tr = await wallet.signAndSendTransaction({
-        signerId: {parameterId},
-        receiverId: "splaunch.testnet",
+        signerId: {signerId},
+        receiverId: contractId,
         actions: [{
           type: "FunctionCall",
           params: {
             methodName: "ft_transfer",
-            args: {receiver_id: "splaunch.testnet", amount: amountToPay, memo: "Entry fee for a match on SpearOnNear Game 1"},
+            args: {receiver_id: contractId, amount: amountToPay, memo: "Entry fee for a match on SpearOnNear Game 1"},
             gas: 10000000000000,
             deposit: 1
           }
@@ -140,7 +153,7 @@ const VerifyPage = () => {
                   <tbody>
                     <tr>
                       <td><strong>Account ID:</strong></td>
-                      <td>{walletData.accountId}</td>
+                      <td>{walletData.signerId}</td>
                     </tr>
                     <tr>
                       <td><strong>Available Near:</strong></td>
