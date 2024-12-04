@@ -103,7 +103,7 @@ const VerifyPage = () => {
           type: "FunctionCall",
           params: {
             methodName: "ft_transfer",
-            args: {receiver_id: contractId, amount: amountToPay, memo: "Entry fee for a match on SpearOnNear Game 1"},
+            args: {receiver_id: contractId, amount: amountToPay.toString(), memo: "Entry fee for a match on SpearOnNear Game 1"},
             gas: 10000000000000,
             deposit: 1
           }
