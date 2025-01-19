@@ -20,7 +20,7 @@ const ConnectWalletButton = ({ onWalletConnected }) => {
       const accounts = await wallet.signIn({ contractId: "spearonnear.near" });
 
       const nearBalance = await getNearBalance(accounts[0].accountId);
-      tokenBalance = getTokenBalance('splaunch.testnet',accounts[0].accountId)
+      const tokenBalance = 0;
       console.log(accounts);
       
 
