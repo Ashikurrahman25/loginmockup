@@ -19,14 +19,10 @@ const ConnectWalletButton = ({ onWalletConnected }) => {
       const wallet = await selector.wallet('meteor-wallet');
       const accounts = await wallet.signIn({ contractId: "spearonnear.near" });
 
-      const nearBalance = await getBalance(accounts[0].accountId);
+      const nearBalance = await getNearBalance(accounts[0].accountId);
+      tokenBalance = getTokenBalance('splaunch.testnet',accounts[0].accountId)
       console.log(accounts);
-      const tokenBalance = await viewMethod({
-        networkId: 'testnet',
-        contractId: 'splaunch.testnet',
-        method: 'ft_balance_of',
-        args: { account_id: accounts[0].accountId },
-      });
+      
 
       onWalletConnected({
         accountId: accounts[0].accountId,
@@ -42,7 +38,18 @@ const ConnectWalletButton = ({ onWalletConnected }) => {
     }
   };
 
-  const getBalance = async (accountId) => {
+  const getTokenBalance =async(tokenId, accountId)=>{
+    const balance = await viewMethod({
+      networkId: 'testnet',
+      contractId: tokenId,
+      method: 'ft_balance_of',
+      args: { account_id: accountId },
+    });
+
+    return balance;
+  } 
+
+  const getNearBalance = async (accountId) => {
     const provider = new providers.JsonRpcProvider({ url: 'https://rpc.testnet.near.org' });
     const account = await provider.query({ request_type: 'view_account', finality: 'final', account_id: accountId });
     return account.amount;

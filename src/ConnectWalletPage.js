@@ -48,10 +48,10 @@ const ConnectWalletPage = () => {
                   <td><strong>Near Balance:</strong></td>
                   <td>{(walletData.nearBalance/Math.pow(10,24)).toFixed(2)}</td>
                 </tr>
-                <tr>
+                {/* <tr>
                   <td><strong>Spear Balance:</strong></td>
                   <td>{walletData.tokenBalance/Math.pow(10,8)}</td>
-                </tr>
+                </tr> */}
               </tbody>
             </table>
 
