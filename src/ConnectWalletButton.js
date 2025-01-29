@@ -6,13 +6,15 @@ import { Buffer } from 'buffer';
 
 window.Buffer = Buffer;
 
+const ISMAINNET = false;
+
 const ConnectWalletButton = ({ onWalletConnected }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const handleConnectWallet = async () => {
     try {
       const selector = await setupWalletSelector({
-        network: "testnet",
+        network: ISMAINNET ? 'mainnet': 'testnet',
         modules: [setupMeteorWallet()],
       });
 
@@ -21,8 +23,8 @@ const ConnectWalletButton = ({ onWalletConnected }) => {
 
       const nearBalance = await getBalance(accounts[0].accountId);
       const tokenBalance = await viewMethod({
-        networkId: 'testnet',
-        contractId: 'splaunch.testnet',
+        networkId: ISMAINNET ? 'mainnet': 'testnet',
+        contractId: ISMAINNET ? 'mainnet': 'splaunch.testnet',
         method: 'ft_balance_of',
         args: { account_id: accounts[0].accountId },
       });
@@ -42,7 +44,7 @@ const ConnectWalletButton = ({ onWalletConnected }) => {
   };
 
   const getBalance = async (accountId) => {
-    const provider = new providers.JsonRpcProvider({ url: 'https://rpc.testnet.near.org' });
+    const provider = new providers.JsonRpcProvider({ url: ISMAINNET ? 'https://rpc.mainnet.near.org': 'https://rpc.testnet.near.org' });
     const account = await provider.query({ request_type: 'view_account', finality: 'final', account_id: accountId });
     return account.amount;
   };

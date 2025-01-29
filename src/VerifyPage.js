@@ -5,12 +5,12 @@ import { setupMeteorWallet } from '@near-wallet-selector/meteor-wallet';
 import { providers } from 'near-api-js';
 import { Buffer } from 'buffer';
 import 'bootstrap/dist/css/bootstrap.min.css';
-
 window.Buffer = Buffer;
 
+const ISMAINNET = false;
 const VerifyPage = () => {
 
-  const { signerId,contractId, amount } = useParams();
+  const { signerId,contractId, amount, contract } = useParams();
   const [walletData, setWalletData] = useState(null);
   const [amountToPay, setAmountToPay] = useState('1000000000'); // example amount
   const [transactionId, setTransactionId] = useState(null);
@@ -27,7 +27,7 @@ const VerifyPage = () => {
   const handleVerify = async () => {
     try {
       const selector = await setupWalletSelector({
-        network: "testnet",
+        network: ISMAINNET ? 'mainnet': 'testnet',
         modules: [setupMeteorWallet()],
       });
 
@@ -48,7 +48,7 @@ const VerifyPage = () => {
   
       const nearBalance = await getBalance(signerId);
       const tokenBalance = await viewMethod({
-        networkId: 'testnet',
+        networkId: ISMAINNET ? 'mainnet': 'testnet',
         contractId: contractId,
         method: 'ft_balance_of',
         args: { account_id: signerId },
@@ -68,7 +68,7 @@ const VerifyPage = () => {
   };
 
   const getBalance = async (accountId) => {
-    const provider = new providers.JsonRpcProvider({ url: 'https://rpc.testnet.near.org' });
+    const provider = new providers.JsonRpcProvider({ url: ISMAINNET ? 'https://rpc.mainnet.near.org': 'https://rpc.testnet.near.org' });
     const account = await provider.query({ request_type: 'view_account', finality: 'final', account_id: accountId });
     return account.amount;
   };
@@ -91,7 +91,7 @@ const VerifyPage = () => {
   const handlePayment = async () => {
     try {
       const selector = await setupWalletSelector({
-        network: "testnet",
+        network:  ISMAINNET ? 'mainnet': 'testnet',
         modules: [setupMeteorWallet()],
       });
 
@@ -103,7 +103,7 @@ const VerifyPage = () => {
           type: "FunctionCall",
           params: {
             methodName: "ft_transfer",
-            args: {receiver_id: contractId, amount: amountToPay, memo: "Entry fee for a match on SpearOnNear Game 1"},
+            args: {receiver_id: contractId, amount: amountToPay, memo: "Entry fee for a match on SpearOnNear Game"},
             gas: 10000000000000,
             deposit: 1
           }
@@ -124,7 +124,7 @@ const VerifyPage = () => {
         const messageObject = {
             success: true,
             identifier: 'payment',
-            txnLink:`https://testnet.nearblocks.io/txns/${transactionId}`
+            txnLink:  ISMAINNET ? `https://nearblocks.io/txns/${transactionId}`: `https://testnet.nearblocks.io/txns/${transactionId}`
         };
 
         window.opener.postMessage(JSON.stringify(messageObject), "*");
@@ -143,7 +143,7 @@ const VerifyPage = () => {
             {paymentDone ? (
               <>
                 <p className="mt-3">
-                  <strong>Payment Successful!</strong> <a href={`https://testnet.nearblocks.io/txns/${transactionId}`} target="_blank" rel="noopener noreferrer">View Transaction</a>
+                  <strong>Payment Successful!</strong> <a href={ISMAINNET ? `https://nearblocks.io/txns/${transactionId}`: `https://testnet.nearblocks.io/txns/${transactionId}`} target="_blank" rel="noopener noreferrer">View Transaction</a>
                 </p>
                 <button className="btn btn-secondary mt-3" onClick={onBack} >Back to Game</button>
               </>
@@ -160,12 +160,12 @@ const VerifyPage = () => {
                       <td>{(walletData.nearBalance/Math.pow(10,24)).toFixed(2)}</td>
                     </tr>
                     <tr>
-                      <td><strong>Available Spear:</strong></td>
+                      <td><strong>Available {contract}:</strong></td>
                       <td>{walletData.tokenBalance/Math.pow(10,8)}</td>
                     </tr>
                     <tr>
                       <td><strong>Amount to Pay:</strong></td>
-                      <td>{amountToPay/Math.pow(10,8)} Spear</td>
+                      <td>{amountToPay/Math.pow(10,8)} {contract}</td>
                     </tr>
                   </tbody>
                 </table>
@@ -179,7 +179,7 @@ const VerifyPage = () => {
           </>
         ) : (
           <>
-           <p>You have to pay {amountToPay/Math.pow(10,8)} Spear tokens to play the game </p>
+           <p>You have to pay {amountToPay/Math.pow(10,8)} {contract} tokens to play the game </p>
             <button className="btn btn-primary" onClick={handleVerify}>Verify Wallet</button>
             {error && <p className="text-danger mt-3">{error}</p>}
           </>
