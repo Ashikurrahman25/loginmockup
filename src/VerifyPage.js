@@ -10,7 +10,7 @@ window.Buffer = Buffer;
 const ISMAINNET = false;
 const VerifyPage = () => {
 
-  const { signerId,contractId, amount, contract } = useParams();
+  const { signerId, contractId, amount, contract } = useParams();
   const [walletData, setWalletData] = useState(null);
   const [amountToPay, setAmountToPay] = useState('1000000000'); // example amount
   const [transactionId, setTransactionId] = useState(null);
@@ -19,7 +19,7 @@ const VerifyPage = () => {
 
   useEffect(() => {
     if (amount) {
-      setAmountToPay(amount * Math.pow(10, 24)); // assuming amount needs scaling
+      setAmountToPay(amount * Math.pow(10, 8)); // assuming amount needs scaling
     }
   }, [amount]);
 
