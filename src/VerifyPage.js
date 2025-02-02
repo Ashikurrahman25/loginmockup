@@ -19,7 +19,7 @@ const VerifyPage = () => {
 
   useEffect(() => {
     if (amount) {
-      setAmountToPay(amount * Math.pow(10, 8)); // assuming amount needs scaling
+      setAmountToPay(amount * Math.pow(10, 24)); // assuming amount needs scaling
     }
   }, [amount]);
 
@@ -103,7 +103,7 @@ const VerifyPage = () => {
           type: "FunctionCall",
           params: {
             methodName: "ft_transfer",
-            args: {receiver_id: contractId, amount: amountToPay, memo: "Entry fee for a match on SpearOnNear Game"},
+            args: {receiver_id: "speargames.testnet", amount: amountToPay, memo: "Entry fee for a match on SpearOnNear Game"},
             gas: 10000000000000,
             deposit: 1
           }
@@ -155,14 +155,7 @@ const VerifyPage = () => {
                       <td><strong>Account ID:</strong></td>
                       <td>{walletData.signerId}</td>
                     </tr>
-                    <tr>
-                      <td><strong>Available Near:</strong></td>
-                      <td>{(walletData.nearBalance/Math.pow(10,24)).toFixed(2)}</td>
-                    </tr>
-                    <tr>
-                      <td><strong>Available {contract}:</strong></td>
-                      <td>{walletData.tokenBalance/Math.pow(10,8)}</td>
-                    </tr>
+              
                     <tr>
                       <td><strong>Amount to Pay:</strong></td>
                       <td>{amountToPay/Math.pow(10,8)} {contract}</td>
